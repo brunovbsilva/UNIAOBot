@@ -1,0 +1,5 @@
+discord.py
+requests
+python-decouple
+windows-curses
+google_images_search
