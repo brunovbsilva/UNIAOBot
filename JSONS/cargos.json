@@ -1,0 +1,22 @@
+{
+    "values": [
+        {
+            "role_name": "uni\u00e3o BASE",
+            "role_id": 690982391073734716,
+            "emoji": "\ud83e\udd47",
+            "message_id": 1002769888152129678
+        },
+        {
+            "role_name": "CINEMINHA",
+            "role_id": 874103747071053855,
+            "emoji": "\ud83e\udd48",
+            "message_id": 1002770010718093414
+        },
+        {
+            "role_name": "OTAKU",
+            "role_id": 932443081427538000,
+            "emoji": "\ud83e\udd49",
+            "message_id": 1002770109611380766
+        }
+    ]
+}

@@ -10,7 +10,7 @@ class Images(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name="bot")
+    @commands.command(name="bot", help="apresentação do bot")
     async def get_random_image(self, ctx):
         embed = discord.Embed(
             title = "UNIÃOBot!",
@@ -23,7 +23,7 @@ class Images(commands.Cog):
         embed.set_image(url=self.bot.user.avatar_url)
         await ctx.send(embed=embed)
     
-    @commands.command(name="pesquisa")
+    @commands.command(name="pesquisa", help="retorna uma imagem ou gif. uso 'u!pesquisa [o que quiser]'")
     async def get_search_image(self, ctx, *expression):
         pesquisa = ' '.join(expression)
         gis = GoogleImagesSearch(GCS_DEVELOPER_KEY, GCS_CX)

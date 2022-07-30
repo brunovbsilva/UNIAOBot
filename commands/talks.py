@@ -6,7 +6,7 @@ class Talks(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="segredo")
+    @commands.command(name="segredo", help="é segredo")
     async def secret(self, ctx):
         try:
             await ctx.author.send("Comi o cu de quem ta lendo")
@@ -14,12 +14,12 @@ class Talks(commands.Cog):
         except discord.errors.Forbidden:
             await ctx.send(f"@{ctx.author}, Não consigo te enviar mensagem no privado.")
     
-    @commands.command(name="salve")
+    @commands.command(name="salve", help="o bot te manda um salve")
     async def salve(self, ctx):
         await ctx.send(f"Olá {ctx.author}")
 
     
-    @commands.command(name='VDN')
+    @commands.command(name='VDN', help="frases aleatórias do sonoplasta do 'Vai Dar Namoro'")
     async def get_random_phrase_VDN(self, ctx):
         phrases = [
             'CAVALO',

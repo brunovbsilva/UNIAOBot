@@ -5,13 +5,13 @@ class Smarts(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(name="calcular")
+    @commands.command(name="calcular", help="realiza contas matemáticas. exemplo: 'u!calcular 23 * 83 / 17 + (213-78)'")
     async def calculate_expression(self, ctx, *expression):
         expression = "".join(expression)
         response = eval(expression)
         await ctx.send("A resposta é: " + str(response))
 
-    @commands.command(name='roll', help='Sorteia um número entre 1 ao número passado. argumentos: [número]')
+    @commands.command(name='roll', help="Sorteia um número entre 1 ao número passado. uso: 'u!roll [número]'")
     async def roll_(self, ctx, expression):
         response = []
         count = 0
