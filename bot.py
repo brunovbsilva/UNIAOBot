@@ -1,8 +1,4 @@
-import asyncio
-from datetime import datetime
-import json
 import os
-from turtle import clear
 from decouple import config
 from discord.ext import commands
 import discord
