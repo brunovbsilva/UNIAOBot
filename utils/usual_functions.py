@@ -9,8 +9,7 @@ def writeJson(name, data):
             json.dump(data,j,indent=4)
 
 def isVIP(id):
-    with open (f'JSONS/VIP.json') as _json:
-        data = json.load(_json)
-        if id in data['values']:
-            return True
-        return False
+    data = readJson('VIP')
+    if id in data['values']:
+        return True
+    return False
