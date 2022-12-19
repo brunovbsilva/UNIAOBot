@@ -1,13 +1,13 @@
 import os
 from discord.ext import commands
 import discord
-from utils.usual_functions import readJson, writeJson
+from utils.usual_functions import isVIP, readJson, writeJson
 
 class Reactions(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='poll', help="cria uma enquete. uso: 'u!poll [pergunta sim ou não]'")
+    @commands.command(name='poll', help=f"cria uma enquete. uso: 'u!poll [pergunta sim ou não]'")
     async def poll(self, ctx, *question):
         await ctx.channel.purge(limit=1)
         message = await ctx.send(f"```Enquete: \n{' '.join(question)}```\n**✅ = Sim**\n**❎ = Não**")
@@ -18,23 +18,22 @@ class Reactions(commands.Cog):
         data['values'].append(new_poll)
         writeJson('polls', data)
 
-    @commands.command(name="cargos")
+    @commands.command(name="role", help=f"[VIP] cria cargos por reação. {os.linesep}ex: 'u!role [emoji] [cargo] [mensagem]'")
     async def cargos_por_reacao(self, ctx, emoji=None, cargo:discord.Role=None, *, message=None):
-        role = discord.utils.find(lambda r: r.id == 544691816147058688, ctx.message.guild.roles)
-        if not role in ctx.author.roles:
-            await ctx.send(f'Olá <@{ctx.author.id}>, O comando só pode ser usado por moderadores.')
+        if not isVIP(ctx.author.id):
+            await ctx.send(f'Olá <@{ctx.author.id}>, O comando só pode ser usado por VIPs.')
             return
 
         if emoji == None:
-            embed=discord.Embed(title='TeamEXP',description=f'*Escolha um emoji, cargo e mensagem:* {os.linesep}ex: /presente [emoji] [cargo] [mensagem]')
-            await ctx.send(embed=embed)  
+            embed=discord.Embed(title='UNIAOBot',description=f"*Escolha um emoji, cargo e mensagem:* {os.linesep}ex: u!role [emoji] [cargo] [mensagem]")
+            await ctx.send(embed=embed)
         else:
-            if cargo ==None:
-                embed=discord.Embed(title='TeamEXP',description=f'*Escolha um emoji, cargo e mensagem:**{os.linesep}ex: /presente [emoji] [cargo] [mensagem]')
-                await ctx.send(embed=embed) 
+            if cargo == None:
+                embed=discord.Embed(title='UNIAOBot',description=f"*Escolha um emoji, cargo e mensagem:**{os.linesep}ex: u!role [emoji] [cargo] [mensagem]")
+                await ctx.send(embed=embed)
             else:
-                if message ==None:
-                    embed=discord.Embed(title='TeamEXP',description=f'**Escolha um emoji, cargo e mensagem:* {os.linesep}ex: /presente [emoji] [cargo] [mensagem]')
+                if message == None:
+                    embed=discord.Embed(title='UNIAOBot',description=f"**Escolha um emoji, cargo e mensagem:* {os.linesep}ex: u!role [emoji] [cargo] [mensagem]")
                     await ctx.send(embed=embed)
                 else:
                     embed=discord.Embed(description=f'**{message}**')
@@ -47,7 +46,8 @@ class Reactions(commands.Cog):
                         'role_name':cargo.name,
                         'role_id':cargo.id,
                         'emoji':emoji,
-                        'message_id':enviar.id }
+                        'message_id':enviar.id
+                    }
                     data['values'].append(new_react_role)
                     writeJson('cargos', data)
 
