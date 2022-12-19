@@ -4,6 +4,7 @@ import os
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import MissingRequiredArgument, CommandNotFound, CommandInvokeError
+from utils.usual_functions import isVIP
 
 class Manager(commands.Cog):
     def __init__(self, bot):
@@ -28,7 +29,7 @@ class Manager(commands.Cog):
             await message.delete()
         
         if message.channel.id == 1002400564241514587:
-            print(f"{message.author} no canal de 10 seg: {message.content}")
+            print(f"{message.author}, {message.author.id}, no canal de 10 seg: {message.content}")
             await asyncio.sleep(10)
             await message.delete()
 
@@ -43,11 +44,10 @@ class Manager(commands.Cog):
         else:
             raise error
     
-    @commands.command(name='clear', pass_context = True, help="apaga X mensagens no chat, só pode ser utilizada por moderadores. uso: 'u!clear X'")
+    @commands.command(name='clear', pass_context = True, help="apaga X mensagens no chat, só pode ser utilizada por VIPs. uso: 'u!clear X'")
     async def clear(self, ctx, number):
-        role = discord.utils.find(lambda r: r.id == 544691816147058688, ctx.message.guild.roles)
-        if not role in ctx.author.roles:
-            await ctx.send(f'Olá <@{ctx.author.id}>, O comando só pode ser usado por moderadores.')
+        if not isVIP(ctx.author.id):
+            await ctx.send(f'Olá <@{ctx.author.id}>, O comando só pode ser usado por VIPs.')
             return
         
         qtt = eval(number)

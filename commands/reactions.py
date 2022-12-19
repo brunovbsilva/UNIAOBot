@@ -1,8 +1,7 @@
-import imp
-import json
 import os
 from discord.ext import commands
 import discord
+from utils.usual_functions import readJson, writeJson
 
 class Reactions(commands.Cog):
     def __init__(self, bot):
@@ -14,12 +13,10 @@ class Reactions(commands.Cog):
         message = await ctx.send(f"```Enquete: \n{' '.join(question)}```\n**✅ = Sim**\n**❎ = Não**")
         await message.add_reaction('✅')
         await message.add_reaction('❎')
-        with open ('JSONS/polls.json') as json_file:
-            data = json.load(json_file)
-            new_poll = { 'message_id': message.id }
-            data['values'].append(new_poll)
-            with open ('JSONS/polls.json','w') as j:
-                json.dump(data,j,indent=4)
+        data = readJson('polls')
+        new_poll = { 'message_id': message.id }
+        data['values'].append(new_poll)
+        writeJson('polls', data)
 
     @commands.command(name="cargos")
     async def cargos_por_reacao(self, ctx, emoji=None, cargo:discord.Role=None, *, message=None):
@@ -45,53 +42,46 @@ class Reactions(commands.Cog):
                     enviar= await ctx.send(embed=embed)
                     await enviar.add_reaction(emoji)
 
-                    with open ('JSONS/cargos.json') as json_file:
-                        data = json.load(json_file)
-
-                        new_react_role = {
-                            'role_name':cargo.name,
-                            'role_id':cargo.id,
-                            'emoji':emoji,
-                            'message_id':enviar.id }
-                        data['values'].append(new_react_role)
-
-                        with open ('JSONS/cargos.json','w') as j:
-                            json.dump(data,j,indent=4)
+                    data = readJson('cargos')
+                    new_react_role = {
+                        'role_name':cargo.name,
+                        'role_id':cargo.id,
+                        'emoji':emoji,
+                        'message_id':enviar.id }
+                    data['values'].append(new_react_role)
+                    writeJson('cargos', data)
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
-        with open ('JSONS/cargos.json') as react_file:
-            data = json.load(react_file)
-            for x in data['values']:
-                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
-                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles,id=x['role_id'])
-                    await self.bot.get_guild(payload.guild_id).get_member(payload.user_id).remove_roles(role)
+        data = readJson('cargos')
+        for x in data['values']:
+            if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles,id=x['role_id'])
+                await self.bot.get_guild(payload.guild_id).get_member(payload.user_id).remove_roles(role)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if payload.member.bot:
             pass
         else:
-            with open ('JSONS/cargos.json') as react_file:
-                data = json.load(react_file)
-                for x in data['values']:
-                    if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
-                        role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles,id=x['role_id'])
-                        await payload.member.add_roles(role)
+            data = readJson('cargos')
+            for x in data['values']:
+                if x['emoji'] == payload.emoji.name and x['message_id'] == payload.message_id:
+                    role = discord.utils.get(self.bot.get_guild(payload.guild_id).roles,id=x['role_id'])
+                    await payload.member.add_roles(role)
             
-            with open ('JSONS/polls.json') as react_file:
-                data = json.load(react_file)
-                for x in data['values']:
-                    if "\u2705" == payload.emoji.name and x['message_id'] == payload.message_id:
-                        channel = self.bot.get_channel(payload.channel_id)
-                        message = await channel.fetch_message(payload.message_id)
-                        user = self.bot.get_user(payload.user_id)
-                        await message.remove_reaction('❎', user)
-                    elif "\u274e" == payload.emoji.name and x['message_id'] == payload.message_id:
-                        channel = self.bot.get_channel(payload.channel_id)
-                        message = await channel.fetch_message(payload.message_id)
-                        user = self.bot.get_user(payload.user_id)
-                        await message.remove_reaction('✅', user)
+            data = readJson('polls')
+            for x in data['values']:
+                if "\u2705" == payload.emoji.name and x['message_id'] == payload.message_id:
+                    channel = self.bot.get_channel(payload.channel_id)
+                    message = await channel.fetch_message(payload.message_id)
+                    user = self.bot.get_user(payload.user_id)
+                    await message.remove_reaction('❎', user)
+                elif "\u274e" == payload.emoji.name and x['message_id'] == payload.message_id:
+                    channel = self.bot.get_channel(payload.channel_id)
+                    message = await channel.fetch_message(payload.message_id)
+                    user = self.bot.get_user(payload.user_id)
+                    await message.remove_reaction('✅', user)
 
 
 def setup(bot):

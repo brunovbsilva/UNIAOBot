@@ -14,7 +14,7 @@ class Images(commands.Cog):
     async def get_random_image(self, ctx):
         embed = discord.Embed(
             title = "UNIÃOBot!",
-            description = "Olá, sou o boto da união\nPS: Mensagem automática!",
+            description = "Olá, sou o bot da união\nPS: Mensagem automática!",
             color=0x0000FF,
         )
         embed.set_author(name=self.bot.user.name, icon_url=self.bot.user.avatar_url)
