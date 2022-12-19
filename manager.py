@@ -1,6 +1,4 @@
 import asyncio
-import json
-import os
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import MissingRequiredArgument, CommandNotFound, CommandInvokeError
