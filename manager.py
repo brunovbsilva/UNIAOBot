@@ -42,7 +42,7 @@ class Manager(commands.Cog):
         else:
             raise error
     
-    @commands.command(name='clear', pass_context = True, help="apaga X mensagens no chat, só pode ser utilizada por VIPs. uso: 'u!clear X'")
+    @commands.command(name='clear', pass_context = True, help="[VIP] apaga X mensagens no chat. uso: 'u!clear X'")
     async def clear(self, ctx, number):
         if not isVIP(ctx.author.id):
             await ctx.send(f'Olá <@{ctx.author.id}>, O comando só pode ser usado por VIPs.')
